@@ -2,13 +2,28 @@
 
 import { useState, useEffect } from "react";
 
+// 1. Definimos la estructura exacta de nuestros datos (TypeScript Interfaces)
+interface Message {
+  role: "user" | "assistant" | "system";
+  content: string;
+}
+
+interface SessionStats {
+  prompt: number;
+  completion: number;
+  total: number;
+  modelName: string;
+  time: number;
+}
+
 export default function GroqChat() {
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMsj, setErrorMsj] = useState("");
+  // 2. Le decimos a useState qué tipo de datos va a guardar
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [errorMsj, setErrorMsj] = useState<string>("");
   
-  const [stats, setStats] = useState({
+  const [stats, setStats] = useState<SessionStats>({
     prompt: 0,
     completion: 0,
     total: 0,
@@ -39,12 +54,13 @@ export default function GroqChat() {
     setErrorMsj("");
   };
 
-  const handleSubmit = async (e) => {
+  // 3. Tipamos el evento de React para que TypeScript no se queje
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!input.trim()) return;
 
     setErrorMsj("");
-    const userMessage = { role: "user", content: input };
+    const userMessage: Message = { role: "user", content: input };
     
     const updatedMessages = [...messages, userMessage];
     setMessages(updatedMessages);
@@ -59,13 +75,12 @@ export default function GroqChat() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "llama-3.1-8b-instant",
+          model: "llama-3.1-8b-instant", 
           messages: updatedMessages, 
         }),
       });
 
-     if (!response.ok) {
-        // Leemos el JSON del error para saber EXACTAMENTE qué falló
+      if (!response.ok) {
         const errorData = await response.json();
         console.error("Detalles del servidor Groq:", errorData);
         throw new Error(`Error ${response.status}: ${errorData.error?.message || 'Revisa la consola'}`);
@@ -73,7 +88,11 @@ export default function GroqChat() {
 
       const data = await response.json();
       
-      const aiMessage = data.choices[0].message;
+      const aiMessage: Message = {
+        role: "assistant",
+        content: data.choices[0].message.content
+      };
+      
       setMessages([...updatedMessages, aiMessage]);
 
       setStats((prev) => ({
@@ -84,9 +103,9 @@ export default function GroqChat() {
         time: data.usage.total_time || 0 
       }));
 
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      setErrorMsj("Ocurrió un problema de comunicación con el modelo.");
+      setErrorMsj(error.message || "Ocurrió un problema de comunicación con el modelo Llama.");
     } finally {
       setIsLoading(false);
     }
@@ -95,7 +114,7 @@ export default function GroqChat() {
   return (
     <div className="flex h-screen bg-white text-gray-900 font-sans">
       
-      {/* Sidebar de Métricas (Mantenemos un tono oscuro elegante para contrastar) */}
+      {/* Sidebar de Métricas */}
       <div className="w-1/4 bg-[#1C1C1E] p-6 border-r border-gray-800 flex flex-col justify-between text-white">
         <div>
           <h2 className="text-lg font-semibold mb-6 text-gray-200 tracking-wide">Analíticas de Sesión</h2>
@@ -116,10 +135,17 @@ export default function GroqChat() {
               <span className="text-2xl font-medium text-[#0A84FF]">{stats.total}</span>
             </div>
 
-            <div className="bg-[#2C2C2E] p-4 rounded-xl mt-6">
+            <div className="bg-[#2C2C2E] p-4 rounded-xl mt-6 border border-gray-700">
               <span className="text-gray-400 block text-xs uppercase font-semibold mb-1">Modelo Activo</span>
               <span className="font-medium text-purple-400">{stats.modelName}</span>
             </div>
+            
+            {stats.time > 0 && (
+              <div className="bg-[#2C2C2E] p-4 rounded-xl border border-gray-700">
+                <span className="text-gray-400 block text-xs uppercase font-semibold mb-1">Tiempo de Inferencia</span>
+                <span className="font-medium text-yellow-400">{stats.time.toFixed(3)} s</span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -131,11 +157,10 @@ export default function GroqChat() {
         </button>
       </div>
 
-      {/* Área Principal de Chat (Estilo iOS) */}
+      {/* Área Principal de Chat */}
       <div className="w-3/4 flex flex-col bg-[#F2F2F7]">
-        {/* Cabecera del chat */}
         <div className="bg-white/80 backdrop-blur-md border-b border-gray-200 p-4 text-center z-10 sticky top-0">
-          <h1 className="font-semibold text-lg">Asistente Llama 3</h1>
+          <h1 className="font-semibold text-lg">Asistente Llama 3.1</h1>
           <p className="text-xs text-gray-500">Groq Engine</p>
         </div>
 
@@ -176,7 +201,7 @@ export default function GroqChat() {
           )}
         </div>
 
-        {/* Formulario de Input (Estilo iMessage) */}
+        {/* Input */}
         <div className="p-4 bg-[#F2F2F7]">
           <form onSubmit={handleSubmit} className="flex gap-3 items-end">
             <div className="flex-1 bg-white border border-gray-300 rounded-full flex items-center px-4 py-2 shadow-sm focus-within:border-[#007AFF] transition-colors">
