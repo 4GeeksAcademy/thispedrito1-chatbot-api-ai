@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 
-// 1. Definimos la estructura exacta de nuestros datos (TypeScript Interfaces)
 interface Message {
   role: "user" | "assistant" | "system";
   content: string;
@@ -17,11 +16,13 @@ interface SessionStats {
 }
 
 export default function GroqChat() {
-  // 2. Le decimos a useState qué tipo de datos va a guardar
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errorMsj, setErrorMsj] = useState<string>("");
+  
+  // Nuevo estado para controlar el menú lateral en móviles
+  const [showMobileStats, setShowMobileStats] = useState<boolean>(false);
   
   const [stats, setStats] = useState<SessionStats>({
     prompt: 0,
@@ -52,9 +53,9 @@ export default function GroqChat() {
     localStorage.removeItem("groq_session_chat");
     localStorage.removeItem("groq_session_stats");
     setErrorMsj("");
+    setShowMobileStats(false);
   };
 
-  // 3. Tipamos el evento de React para que TypeScript no se queje
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!input.trim()) return;
@@ -82,8 +83,7 @@ export default function GroqChat() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Detalles del servidor Groq:", errorData);
-        throw new Error(`Error ${response.status}: ${errorData.error?.message || 'Revisa la consola'}`);
+        throw new Error(`Error ${response.status}: ${errorData.error?.message || 'Error de conexión'}`);
       }
 
       const data = await response.json();
@@ -105,18 +105,35 @@ export default function GroqChat() {
 
     } catch (error: any) {
       console.error(error);
-      setErrorMsj(error.message || "Ocurrió un problema de comunicación con el modelo Llama.");
+      setErrorMsj(error.message || "Ocurrió un problema de comunicación.");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex h-screen bg-white text-gray-900 font-sans">
+    // Usamos h-[100dvh] para que Safari/Chrome en móvil no tapen el input con la barra de navegación
+    <div className="flex h-[100dvh] bg-white text-gray-900 font-sans overflow-hidden">
       
-      {/* Sidebar de Métricas */}
-      <div className="w-1/4 bg-[#1C1C1E] p-6 border-r border-gray-800 flex flex-col justify-between text-white">
+      {/* Overlay oscuro para móvil cuando el menú está abierto */}
+      {showMobileStats && (
+        <div 
+          className="fixed inset-0 bg-black/60 z-40 md:hidden transition-opacity"
+          onClick={() => setShowMobileStats(false)}
+        />
+      )}
+
+      {/* Sidebar de Métricas (Responsive: Drawer en móvil, Fijo en PC) */}
+      <div className={`${showMobileStats ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 transition-transform duration-300 fixed md:relative z-50 w-4/5 md:w-1/4 lg:w-80 h-full bg-[#1C1C1E] p-6 border-r border-gray-800 flex flex-col justify-between text-white shadow-2xl md:shadow-none overflow-y-auto`}>
         <div>
+          {/* Botón de cerrar solo visible en móvil */}
+          <button 
+            onClick={() => setShowMobileStats(false)}
+            className="md:hidden mb-6 text-[#0A84FF] font-semibold flex items-center gap-2"
+          >
+            ← Volver al chat
+          </button>
+
           <h2 className="text-lg font-semibold mb-6 text-gray-200 tracking-wide">Analíticas de Sesión</h2>
           
           <div className="space-y-4 text-sm">
@@ -137,7 +154,7 @@ export default function GroqChat() {
 
             <div className="bg-[#2C2C2E] p-4 rounded-xl mt-6 border border-gray-700">
               <span className="text-gray-400 block text-xs uppercase font-semibold mb-1">Modelo Activo</span>
-              <span className="font-medium text-purple-400">{stats.modelName}</span>
+              <span className="font-medium text-purple-400 break-words">{stats.modelName}</span>
             </div>
             
             {stats.time > 0 && (
@@ -158,13 +175,27 @@ export default function GroqChat() {
       </div>
 
       {/* Área Principal de Chat */}
-      <div className="w-3/4 flex flex-col bg-[#F2F2F7]">
-        <div className="bg-white/80 backdrop-blur-md border-b border-gray-200 p-4 text-center z-10 sticky top-0">
-          <h1 className="font-semibold text-lg">thispedrito chatbot Llama 3.1</h1>
-          <p className="text-xs text-gray-500">Groq Engine</p>
+      <div className="flex-1 flex flex-col bg-[#F2F2F7] w-full relative">
+        
+        {/* Cabecera del chat (Con botón de menú en móvil) */}
+        <div className="bg-white/90 backdrop-blur-md border-b border-gray-200 p-3 flex justify-between items-center z-10 sticky top-0 shrink-0">
+          <button 
+            onClick={() => setShowMobileStats(true)} 
+            className="md:hidden text-[#007AFF] font-medium text-sm p-2 -ml-2"
+          >
+            📊 Stats
+          </button>
+          
+          <div className="text-center flex-1">
+            <h1 className="font-semibold text-[16px] leading-tight text-black">Asistente Llama 3.1</h1>
+            <p className="text-[11px] text-gray-500">Groq Engine</p>
+          </div>
+          
+          {/* Espaciador invisible para centrar el título en móvil */}
+          <div className="w-16 md:hidden"></div>
         </div>
 
-        <div className="flex-1 p-6 overflow-y-auto space-y-4">
+        <div className="flex-1 p-4 md:p-6 overflow-y-auto space-y-4">
           {messages.length === 0 && (
             <div className="text-center text-gray-400 mt-20 text-sm">
               iMessage<br/>Hoy
@@ -174,7 +205,7 @@ export default function GroqChat() {
           {messages.map((msg, index) => (
             <div key={index} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div 
-                className={`max-w-[70%] px-5 py-3 text-[15px] leading-relaxed shadow-sm
+                className={`max-w-[85%] md:max-w-[70%] px-4 md:px-5 py-2 md:py-3 text-[15px] leading-relaxed shadow-sm
                   ${msg.role === 'user' 
                     ? 'bg-[#007AFF] text-white rounded-2xl rounded-br-sm' 
                     : 'bg-[#E5E5EA] text-black rounded-2xl rounded-bl-sm'}`}
@@ -195,15 +226,15 @@ export default function GroqChat() {
           )}
 
           {errorMsj && (
-            <div className="bg-red-50 text-red-600 p-3 rounded-xl text-center text-sm border border-red-200">
+            <div className="bg-red-50 text-red-600 p-3 rounded-xl text-center text-sm border border-red-200 mx-4">
               {errorMsj}
             </div>
           )}
         </div>
 
-        {/* Input */}
-        <div className="p-4 bg-[#F2F2F7]">
-          <form onSubmit={handleSubmit} className="flex gap-3 items-end">
+        {/* Formulario de Input */}
+        <div className="p-3 bg-[#F2F2F7] pb-safe shrink-0">
+          <form onSubmit={handleSubmit} className="flex gap-2 items-end">
             <div className="flex-1 bg-white border border-gray-300 rounded-full flex items-center px-4 py-2 shadow-sm focus-within:border-[#007AFF] transition-colors">
               <input
                 type="text"
@@ -211,7 +242,7 @@ export default function GroqChat() {
                 onChange={(e) => setInput(e.target.value)}
                 disabled={isLoading}
                 placeholder="Mensaje de iMessage"
-                className="w-full bg-transparent focus:outline-none text-[15px] py-1"
+                className="w-full bg-transparent focus:outline-none text-[15px] py-1 text-black"
               />
             </div>
             <button 
@@ -219,14 +250,4 @@ export default function GroqChat() {
               disabled={isLoading || !input.trim()}
               className="bg-[#007AFF] disabled:bg-gray-300 text-white w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 transition-colors"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 translate-x-px">
-                <path d="M3.478 2.404a.75.75 0 00-.926.941l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.404z" />
-              </svg>
-            </button>
-          </form>
-        </div>
-      </div>
-
-    </div>
-  );
-}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0
