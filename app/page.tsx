@@ -160,7 +160,7 @@ export default function GroqChat() {
       {/* Área Principal de Chat */}
       <div className="w-3/4 flex flex-col bg-[#F2F2F7]">
         <div className="bg-white/80 backdrop-blur-md border-b border-gray-200 p-4 text-center z-10 sticky top-0">
-          <h1 className="font-semibold text-lg">Asistente Llama 3.1</h1>
+          <h1 className="font-semibold text-lg">thispedrito chatbot Llama 3.1</h1>
           <p className="text-xs text-gray-500">Groq Engine</p>
         </div>
 
