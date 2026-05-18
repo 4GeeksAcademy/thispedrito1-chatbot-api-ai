@@ -1,8 +1,8 @@
 import './globals.css'
 
 export const metadata = {
-  title: 'Llama 3.1 Chat',
-  description: 'Prototipo de chat con IA',
+  title: 'Nexus Groq Console',
+  description: 'Consola de chat con Groq',
 }
 
 export default function RootLayout({
@@ -12,9 +12,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className="bg-white min-h-screen">
+      <body className="min-h-screen bg-transparent text-gray-900 antialiased">
         {children}
       </body>
+      
     </html>
   )
 }

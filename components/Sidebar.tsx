@@ -11,60 +11,122 @@ export default function Sidebar({ stats, showMobileStats, onClose, onClearSessio
   return (
     <>
       {showMobileStats && (
-        <div 
-          className="fixed inset-0 bg-black/60 z-40 md:hidden transition-opacity"
+        <div
+          className="fixed inset-0 z-40 bg-black/40 xl:hidden"
           onClick={onClose}
         />
       )}
 
-      <div className={`${showMobileStats ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 transition-transform duration-300 fixed md:relative z-50 w-4/5 md:w-1/4 lg:w-80 h-full bg-[#1C1C1E] p-6 border-r border-gray-800 flex flex-col justify-between text-white shadow-2xl md:shadow-none overflow-y-auto`}>
+      <aside className={`${showMobileStats ? "translate-x-0" : "translate-x-full pointer-events-none"} fixed inset-0 z-50 h-full w-full bg-[#060e20] p-6 text-[#dae2fd] transition-transform duration-300 xl:hidden`}>
         <div>
-          <button 
+          <button
             onClick={onClose}
-            className="md:hidden mb-6 text-[#0A84FF] font-semibold flex items-center gap-2"
+            className="mb-4 flex items-center gap-2 text-sm font-medium text-[#44e2cd]"
           >
-            ← Volver al chat
+            ← Volver
           </button>
 
-          <h2 className="text-lg font-semibold mb-6 text-gray-200 tracking-wide">Analíticas de Sesión</h2>
-          
-          <div className="space-y-4 text-sm">
-            <div className="bg-[#2C2C2E] p-4 rounded-xl">
-              <span className="text-gray-400 block text-xs uppercase font-semibold mb-1">Prompt Tokens</span>
-              <span className="text-2xl font-medium">{stats.prompt}</span>
-            </div>
-            
-            <div className="bg-[#2C2C2E] p-4 rounded-xl">
-              <span className="text-gray-400 block text-xs uppercase font-semibold mb-1">Completion Tokens</span>
-              <span className="text-2xl font-medium">{stats.completion}</span>
-            </div>
-            
-            <div className="bg-[#0A84FF]/20 p-4 rounded-xl border border-[#0A84FF]/30">
-              <span className="text-[#0A84FF] block text-xs uppercase font-semibold mb-1">Total Consumido</span>
-              <span className="text-2xl font-medium text-[#0A84FF]">{stats.total}</span>
-            </div>
-
-            <div className="bg-[#2C2C2E] p-4 rounded-xl mt-6 border border-gray-700">
-              <span className="text-gray-400 block text-xs uppercase font-semibold mb-1">Modelo Activo</span>
-              <span className="font-medium text-purple-400 break-words">{stats.modelName}</span>
-            </div>
-            
-            {stats.time > 0 && (
-              <div className="bg-[#2C2C2E] p-4 rounded-xl border border-gray-700">
-                <span className="text-gray-400 block text-xs uppercase font-semibold mb-1">Tiempo</span>
-                <span className="font-medium text-yellow-400">{stats.time.toFixed(3)} s</span>
-              </div>
-            )}
+          <div className="mb-5 flex items-center justify-between">
+            <h3 className="text-lg font-semibold text-[#dae2fd]">Token Dashboard</h3>
+            <span className="text-[#44e2cd]">◉</span>
           </div>
-        </div>
 
-        <button 
-          onClick={onClearSession}
-          className="mt-8 text-[#FF453A] bg-[#FF453A]/10 hover:bg-[#FF453A]/20 py-3 px-4 rounded-xl w-full transition font-semibold"
-        >
-          Borrar Conversación
-        </button>
-      </div>
+          <div className="relative mb-5 overflow-hidden rounded-2xl border border-[#464555]/30 bg-[#131b2e]/90 p-5">
+            <p className="mono-ui text-[10px] uppercase tracking-[0.2em] text-[#c7c4d8]">Current Session</p>
+            <div className="mt-2 flex items-end gap-2">
+              <span className="mono-ui text-4xl font-bold text-[#c3c0ff]">{stats.total}</span>
+              <span className="pb-1 text-sm text-[#c7c4d8]">tokens</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 text-sm">
+            <div className="rounded-xl border border-[#464555]/20 bg-[#222a3d]/60 p-3">
+              <span className="mono-ui block text-[10px] uppercase tracking-[0.2em] text-[#c7c4d8]">Prompt</span>
+              <span className="mono-ui text-lg font-semibold text-[#dae2fd]">{stats.prompt}</span>
+            </div>
+
+            <div className="rounded-xl border border-[#464555]/20 bg-[#222a3d]/60 p-3">
+              <span className="mono-ui block text-[10px] uppercase tracking-[0.2em] text-[#c7c4d8]">Completion</span>
+              <span className="mono-ui text-lg font-semibold text-[#dae2fd]">{stats.completion}</span>
+            </div>
+
+            <div className="rounded-xl border border-[#464555]/20 bg-[#222a3d]/60 p-3">
+              <span className="mono-ui block text-[10px] uppercase tracking-[0.2em] text-[#c7c4d8]">Requests</span>
+              <span className="mono-ui text-lg font-semibold text-[#dae2fd]">{stats.requestCount}</span>
+            </div>
+
+            <div className="rounded-xl border border-[#464555]/20 bg-[#222a3d]/60 p-3">
+              <span className="mono-ui block text-[10px] uppercase tracking-[0.2em] text-[#c7c4d8]">Avg Time</span>
+              <span className="mono-ui text-lg font-semibold text-[#dae2fd]">{stats.averageTime.toFixed(2)}s</span>
+            </div>
+          </div>
+
+          <div className="mt-5 rounded-xl border border-[#464555]/20 bg-[#171f33]/70 p-4">
+            <span className="mono-ui block text-[10px] uppercase tracking-[0.2em] text-[#c7c4d8]">Active Engine</span>
+            <span className="mt-1 block text-sm font-semibold text-[#c3c0ff] break-words">{stats.modelName}</span>
+            <span className="mt-2 block text-xs text-[#c7c4d8]">Total Time: {stats.totalTime.toFixed(2)}s</span>
+          </div>
+
+          <button
+            onClick={onClearSession}
+            className="mt-6 w-full rounded-xl border border-[#93000a]/40 bg-[#93000a]/20 px-4 py-3 text-sm font-semibold text-[#ffdad6] transition hover:bg-[#93000a]/30"
+          >
+            Borrar Conversación
+          </button>
+        </div>
+      </aside>
+
+      <aside className="relative z-10 hidden h-full w-[255px] border-l border-[#464555]/20 bg-[#060e20]/80 p-5 text-[#dae2fd] backdrop-blur-xl xl:block">
+        <div>
+          <div className="mb-6 flex items-center justify-between">
+            <h3 className="text-[30px] font-semibold text-[#dae2fd]">Token Dashboard</h3>
+            <span className="text-[#44e2cd]">◉</span>
+          </div>
+
+          <div className="relative mb-6 overflow-hidden rounded-2xl border border-[#464555]/30 bg-[#131b2e]/90 p-5">
+            <p className="mono-ui text-[10px] uppercase tracking-[0.2em] text-[#c7c4d8]">Current Session</p>
+            <div className="mt-2 flex items-end gap-2">
+              <span className="mono-ui text-5xl font-bold text-[#c3c0ff]">{stats.total}</span>
+              <span className="pb-1 text-sm text-[#c7c4d8]">tokens</span>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-3.5 text-sm">
+            <div className="rounded-xl border border-[#464555]/20 bg-[#222a3d]/60 p-3">
+              <span className="mono-ui block text-[10px] uppercase tracking-[0.2em] text-[#c7c4d8]">Prompt</span>
+              <span className="mono-ui text-lg font-semibold text-[#dae2fd]">{stats.prompt}</span>
+            </div>
+            
+            <div className="rounded-xl border border-[#464555]/20 bg-[#222a3d]/60 p-3">
+              <span className="mono-ui block text-[10px] uppercase tracking-[0.2em] text-[#c7c4d8]">Completion</span>
+              <span className="mono-ui text-lg font-semibold text-[#dae2fd]">{stats.completion}</span>
+            </div>
+            
+            <div className="rounded-xl border border-[#464555]/20 bg-[#222a3d]/60 p-3">
+              <span className="mono-ui block text-[10px] uppercase tracking-[0.2em] text-[#c7c4d8]">Requests</span>
+              <span className="mono-ui text-lg font-semibold text-[#dae2fd]">{stats.requestCount}</span>
+            </div>
+
+            <div className="rounded-xl border border-[#464555]/20 bg-[#222a3d]/60 p-3">
+              <span className="mono-ui block text-[10px] uppercase tracking-[0.2em] text-[#c7c4d8]">Avg Time</span>
+              <span className="mono-ui text-lg font-semibold text-[#dae2fd]">{stats.averageTime.toFixed(2)}s</span>
+            </div>
+          </div>
+
+          <div className="mt-5 rounded-xl border border-[#464555]/20 bg-[#171f33]/70 p-4">
+            <span className="mono-ui block text-[10px] uppercase tracking-[0.2em] text-[#c7c4d8]">Active Engine</span>
+            <span className="mt-1 block text-sm font-semibold text-[#c3c0ff] break-words">{stats.modelName}</span>
+            <span className="mt-2 block text-xs text-[#c7c4d8]">Total Time: {stats.totalTime.toFixed(2)}s</span>
+          </div>
+            
+          <button
+            onClick={onClearSession}
+            className="mt-6 w-full rounded-xl border border-[#93000a]/40 bg-[#93000a]/20 px-4 py-3 text-sm font-semibold text-[#ffdad6] transition hover:bg-[#93000a]/30"
+          >
+            Borrar Conversación
+          </button>
+        </div>
+      </aside>
     </>
   );
 }

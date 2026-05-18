@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>thispedrito prototype chatbot ai</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2d3449; /* surface-variant */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #464555; /* outline-variant */
+        }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-fixed-dim": "#3cddc7",
+                    "on-secondary-fixed": "#00201c",
+                    "on-tertiary-container": "#ebd2ff",
+                    "on-surface": "#dae2fd",
+                    "on-tertiary-fixed-variant": "#6900b3",
+                    "on-secondary-container": "#004d44",
+                    "inverse-on-surface": "#283044",
+                    "on-background": "#dae2fd",
+                    "background": "#0b1326",
+                    "surface-bright": "#31394d",
+                    "surface-container-low": "#131b2e",
+                    "primary-container": "#4f46e5",
+                    "on-surface-variant": "#c7c4d8",
+                    "surface": "#0b1326",
+                    "tertiary": "#ddb7ff",
+                    "secondary-fixed": "#62fae3",
+                    "primary-fixed": "#e2dfff",
+                    "on-error-container": "#ffdad6",
+                    "on-tertiary-fixed": "#2c0051",
+                    "error": "#ffb4ab",
+                    "primary-fixed-dim": "#c3c0ff",
+                    "on-primary-container": "#dad7ff",
+                    "on-primary-fixed-variant": "#3323cc",
+                    "primary": "#c3c0ff",
+                    "surface-container-lowest": "#060e20",
+                    "tertiary-fixed": "#f0dbff",
+                    "secondary-container": "#03c6b2",
+                    "on-secondary-fixed-variant": "#005047",
+                    "secondary": "#44e2cd",
+                    "outline-variant": "#464555",
+                    "surface-container-highest": "#2d3449",
+                    "inverse-surface": "#dae2fd",
+                    "on-tertiary": "#490080",
+                    "surface-container-high": "#222a3d",
+                    "error-container": "#93000a",
+                    "inverse-primary": "#4d44e3",
+                    "on-primary": "#1d00a5",
+                    "surface-container": "#171f33",
+                    "on-secondary": "#003731",
+                    "tertiary-fixed-dim": "#ddb7ff",
+                    "outline": "#918fa1",
+                    "surface-tint": "#c3c0ff",
+                    "surface-dim": "#0b1326",
+                    "tertiary-container": "#862dd4",
+                    "on-error": "#690005",
+                    "on-primary-fixed": "#0f0069",
+                    "surface-variant": "#2d3449"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "section-padding": "2rem",
+                    "stack-gap": "1rem",
+                    "chat-max-width": "800px",
+                    "gutter": "1.5rem",
+                    "sidebar-width": "280px"
+            },
+            "fontFamily": {
+                    "headline-md": [
+                            "Inter"
+                    ],
+                    "code-block": [
+                            "JetBrains Mono"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ],
+                    "headline-md-mobile": [
+                            "Inter"
+                    ],
+                    "display-lg": [
+                            "Inter"
+                    ],
+                    "body-lg": [
+                            "Inter"
+                    ],
+                    "label-sm": [
+                            "JetBrains Mono"
+                    ]
+            },
+            "fontSize": {
+                    "headline-md": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "code-block": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-md-mobile": [
+                            "20px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "56px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "500"
+                            }
+                    ]
+            }
+          }
+        }
+      }
+    </script>
+</head>
+<body class="bg-background text-on-background h-screen w-full flex overflow-hidden font-body-md text-body-md antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- Subdued Ambient Background Glow -->
+<div class="fixed inset-0 pointer-events-none z-0 flex justify-center items-center opacity-20">
+<div class="w-[800px] h-[800px] bg-primary/20 blur-[120px] rounded-full"></div>
+</div>
+<!-- Left Sidebar: Navigation & History -->
+<!-- Applying NavigationDrawer JSON styles -->
+<aside class="hidden md:flex flex-col h-full w-[280px] z-[60] bg-surface-container-low/90 backdrop-blur-2xl border-r border-outline-variant/10 shadow-2xl p-4 gap-2 relative">
+<!-- Header -->
+<div class="mb-6 px-2 py-4">
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight font-extrabold">thispedrito AI</h1>
+</div>
+<!-- Navigation Tabs (from JSON) -->
+<nav class="flex flex-col gap-2 flex-1">
+<!-- New Chat (Inactive Style) -->
+<button class="text-on-surface-variant hover:bg-surface-container-highest/30 rounded-xl px-4 py-3 flex items-center gap-3 hover:bg-primary/10 transition-all duration-200 w-full text-left font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[20px]">add</span>
+                New Chat
+            </button>
+<!-- History (Active Style - representing current context) -->
+<button class="bg-secondary-container text-on-secondary-container rounded-xl font-bold px-4 py-3 flex items-center gap-3 w-full text-left font-label-sm text-label-sm shadow-sm">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">history</span>
+                History
+            </button>
+<!-- Expanded History List (Contextual sub-items) -->
+<div class="flex flex-col gap-1 pl-4 mt-2 mb-4 overflow-y-auto max-h-[300px]">
+<div class="text-on-surface-variant/50 font-label-sm text-[10px] uppercase tracking-wider mb-2 mt-2 px-4">Today</div>
+<button class="text-on-surface hover:bg-surface-container-highest/50 rounded-lg px-4 py-2 flex items-center gap-3 text-left font-body-md text-[14px] truncate transition-colors">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">chat_bubble</span>
+<span class="truncate">Architectural patterns for scalable UI</span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container-highest/50 rounded-lg px-4 py-2 flex items-center gap-3 text-left font-body-md text-[14px] truncate transition-colors">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">chat_bubble</span>
+<span class="truncate">Optimize token usage in prompts</span>
+</button>
+<div class="text-on-surface-variant/50 font-label-sm text-[10px] uppercase tracking-wider mb-2 mt-4 px-4">Yesterday</div>
+<button class="text-on-surface-variant hover:bg-surface-container-highest/50 rounded-lg px-4 py-2 flex items-center gap-3 text-left font-body-md text-[14px] truncate transition-colors">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">chat_bubble</span>
+<span class="truncate">Explain quantum computing</span>
+</button>
+</div>
+<div class="mt-auto flex flex-col gap-2">
+<!-- Token Usage (Inactive Style) -->
+<button class="text-on-surface-variant hover:bg-surface-container-highest/30 rounded-xl px-4 py-3 flex items-center gap-3 hover:bg-primary/10 transition-all duration-200 w-full text-left font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[20px]">query_stats</span>
+                    Token Usage
+                </button>
+<!-- Settings (Inactive Style) -->
+<button class="text-on-surface-variant hover:bg-surface-container-highest/30 rounded-xl px-4 py-3 flex items-center gap-3 hover:bg-primary/10 transition-all duration-200 w-full text-left font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+                    Settings
+                </button>
+</div>
+</nav>
+<!-- User Profile Footer -->
+<div class="mt-4 pt-4 border-t border-outline-variant/10 flex items-center gap-3 px-2">
+<div class="w-8 h-8 rounded-full bg-gradient-to-tr from-primary-container to-secondary-container flex items-center justify-center text-on-primary-container font-label-sm text-label-sm font-bold shadow-inner">
+                U
+            </div>
+<div class="flex-1 min-w-0">
+<p class="font-body-md text-[14px] font-medium text-on-surface truncate">User profile</p>
+<p class="font-label-sm text-[10px] text-on-surface-variant truncate">Pro Plan</p>
+</div>
+</div>
+</aside>
+<!-- Center Main Stage: Chat Window -->
+<main class="flex-1 flex flex-col h-full relative z-10">
+<!-- Mobile Header Placeholder (Hidden on Desktop per instructions, but good practice) -->
+<header class="md:hidden flex items-center justify-between p-4 bg-surface-container-low/80 backdrop-blur-md border-b border-outline-variant/10">
+<span class="material-symbols-outlined text-primary">menu</span>
+<span class="font-headline-md-mobile text-headline-md-mobile font-bold text-primary">thispedrito</span>
+<span class="material-symbols-outlined text-on-surface-variant">add</span>
+</header>
+<!-- Chat History Scroll Area -->
+<div class="flex-1 overflow-y-auto pb-32 pt-8 px-4 md:px-8 flex flex-col items-center">
+<div class="w-full max-w-chat-max-width flex flex-col gap-8">
+<!-- System Greeting / Context -->
+<div class="flex flex-col items-center justify-center py-12 text-center opacity-80">
+<div class="w-16 h-16 rounded-2xl bg-surface-container-highest flex items-center justify-center mb-4 shadow-lg border border-outline-variant/10 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent opacity-50"></div>
+<span class="material-symbols-outlined text-[32px] text-primary relative z-10" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-2">Architectural Patterns</h2>
+<p class="font-body-md text-on-surface-variant max-w-md">Resuming conversation. Context loaded successfully.</p>
+</div>
+<!-- User Message Bubble -->
+<div class="flex w-full justify-end">
+<div class="bg-surface-container-highest text-on-surface px-5 py-4 rounded-2xl rounded-tr-sm max-w-[85%] md:max-w-[75%] shadow-sm border border-outline-variant/5">
+<p class="font-body-md leading-relaxed text-[15px]">Can you outline the core differences between a microservices architecture and a monolith when scaling a high-traffic AI application? Focus on database sharding implications.</p>
+</div>
+</div>
+<!-- AI Message Bubble (Glassmorphic & Tinted) -->
+<div class="flex w-full justify-start gap-4 group">
+<div class="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0 mt-1 shadow-sm">
+<span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<div class="bg-surface-container/40 backdrop-blur-sm border border-primary/10 text-on-surface px-5 py-4 rounded-2xl rounded-tl-sm max-w-[85%] md:max-w-[80%] shadow-sm relative overflow-hidden">
+<!-- Inner Glow -->
+<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none"></div>
+<div class="relative z-10 space-y-4">
+<p class="font-body-md leading-relaxed text-[15px]">Scaling a high-traffic AI application presents unique challenges, particularly concerning state management and data layer elasticity. Here is a breakdown focusing on database implications:</p>
+<div class="space-y-2 mt-4">
+<h4 class="font-body-md font-semibold text-primary-fixed-dim">1. Monolithic Architecture</h4>
+<p class="font-body-md text-on-surface-variant text-[14px]">In a monolith, the entire application typically shares a single logical database. Scaling implies vertical scaling (larger machines) or read-replicas. <strong>Sharding</strong> here is incredibly complex because the application code assumes cross-entity joins are cheap and immediate. Sharding a monolithic DB often requires rewriting massive portions of the application logic to handle distributed transactions and eventual consistency.</p>
+</div>
+<div class="bg-surface-container-highest/50 rounded-lg p-4 font-code-block text-code-block text-on-surface-variant border border-outline-variant/10 my-4 overflow-x-auto">
+<pre><code>// Typical Monolith Anti-pattern when Sharding
+SELECT u.name, m.content, ai.tokens_used
+FROM users u
+JOIN messages m ON u.id = m.user_id
+JOIN ai_metrics ai ON m.id = ai.msg_id;
+// Fails when tables exist on different physical shards.</code></pre>
+</div>
+<div class="flex items-center gap-4 mt-6 pt-4 border-t border-outline-variant/10">
+<button class="text-on-surface-variant hover:text-primary transition-colors" title="Copy">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+</button>
+<button class="text-on-surface-variant hover:text-secondary transition-colors" title="Good Response">
+<span class="material-symbols-outlined text-[18px]">thumb_up</span>
+</button>
+<button class="text-on-surface-variant hover:text-error transition-colors" title="Bad Response">
+<span class="material-symbols-outlined text-[18px]">thumb_down</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Floating Input / Command Bar -->
+<div class="absolute bottom-0 left-0 w-full p-4 md:p-6 bg-gradient-to-t from-background via-background to-transparent z-20 flex justify-center">
+<div class="w-full max-w-chat-max-width bg-surface-container-high/80 backdrop-blur-xl border border-outline-variant/30 rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.5)] p-2 transition-all focus-within:border-primary/50 focus-within:bg-surface-container-high/95 focus-within:shadow-[0_10px_50px_rgba(79,70,229,0.15)] flex flex-col relative group">
+<div class="flex items-end gap-2">
+<button class="p-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest rounded-xl transition-colors flex-shrink-0">
+<span class="material-symbols-outlined text-[24px]">attach_file</span>
+</button>
+<textarea class="w-full bg-transparent border-none focus:ring-0 text-on-surface font-body-md placeholder:text-on-surface-variant/50 resize-none max-h-[150px] min-h-[44px] py-3 overflow-y-auto" placeholder="Message thispedrito AI... (Press Shift+Enter for new line)" rows="1"></textarea>
+<button class="p-3 bg-primary text-on-primary rounded-xl hover:bg-primary-fixed transition-colors flex-shrink-0 shadow-md">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">send</span>
+</button>
+</div>
+<!-- Tiny contextual footer within input area -->
+<div class="flex justify-between items-center px-3 pb-1 pt-2 opacity-60">
+<span class="font-label-sm text-[10px] text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">info</span>
+                        AI can make mistakes. Verify critical code.
+                    </span>
+<span class="font-label-sm text-[10px] text-secondary bg-secondary/10 px-2 py-0.5 rounded-full border border-secondary/20">
+                        42 Tokens
+                    </span>
+</div>
+</div>
+</div>
+</main>
+<!-- Right Sidebar: Token Consumption Dashboard -->
+<aside class="hidden xl:flex flex-col w-[320px] h-full z-[50] bg-surface-container-lowest/80 backdrop-blur-xl border-l border-outline-variant/10 p-6 overflow-y-auto gap-6">
+<div class="flex items-center justify-between mb-2">
+<h3 class="font-headline-md text-[18px] font-semibold text-on-surface">Token Dashboard</h3>
+<span class="material-symbols-outlined text-secondary">memory</span>
+</div>
+<!-- Glassmorphic Stat Card -->
+<div class="bg-surface-container-low border border-outline-variant/20 rounded-2xl p-5 shadow-lg relative overflow-hidden group">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-all duration-500"></div>
+<p class="font-label-sm text-on-surface-variant mb-1 uppercase tracking-wider">Current Session</p>
+<div class="flex items-end gap-2 mb-4">
+<span class="font-display-lg text-[36px] font-bold text-primary-fixed-dim leading-none">1,240</span>
+<span class="font-body-md text-on-surface-variant pb-1">tokens</span>
+</div>
+<!-- Progress Bar -->
+<div class="w-full h-2 bg-surface-variant rounded-full overflow-hidden mb-2">
+<div class="h-full bg-gradient-to-r from-primary to-secondary w-[65%] rounded-full shadow-[0_0_10px_rgba(3,198,178,0.5)]"></div>
+</div>
+<div class="flex justify-between font-label-sm text-[11px] text-on-surface-variant">
+<span>Usage Limit</span>
+<span class="text-secondary-fixed">65% (Approx. 650 left)</span>
+</div>
+</div>
+<!-- Secondary Stats Grid -->
+<div class="grid grid-cols-2 gap-3">
+<div class="bg-surface-container-highest/40 border border-outline-variant/10 rounded-xl p-4 flex flex-col justify-center">
+<span class="material-symbols-outlined text-tertiary-fixed-dim mb-2 text-[20px]">input</span>
+<p class="font-label-sm text-on-surface-variant text-[10px] uppercase">Prompt Tokens</p>
+<p class="font-headline-md text-[16px] text-on-surface">840</p>
+</div>
+<div class="bg-surface-container-highest/40 border border-outline-variant/10 rounded-xl p-4 flex flex-col justify-center">
+<span class="material-symbols-outlined text-secondary-fixed mb-2 text-[20px]">output</span>
+<p class="font-label-sm text-on-surface-variant text-[10px] uppercase">Completion Tokens</p>
+<p class="font-headline-md text-[16px] text-on-surface">400</p>
+</div>
+</div>
+<!-- Model Selection / Info -->
+<div class="mt-4">
+<h4 class="font-label-sm text-on-surface-variant uppercase tracking-wider mb-3">Active Engine</h4>
+<div class="flex items-center justify-between bg-surface-container border border-outline-variant/20 rounded-xl p-3 cursor-pointer hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-tertiary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-tertiary-container text-[18px]">model_training</span>
+</div>
+<div>
+<p class="font-body-md text-[14px] font-medium text-on-surface">GPT-4 Turbo</p>
+<p class="font-label-sm text-[10px] text-on-surface-variant">High precision</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
+</div>
+</div>
+<!-- Decorative elements to fill space and add tech vibe -->
+<div class="mt-auto pt-6 border-t border-outline-variant/10 opacity-50">
+<div class="flex items-center gap-2 mb-2">
+<div class="w-2 h-2 rounded-full bg-secondary animate-pulse"></div>
+<span class="font-label-sm text-[10px] text-on-surface-variant uppercase">System Online</span>
+</div>
+<p class="font-code-block text-[10px] text-outline break-words">
+                LATENCY: 42ms | REGION: US-EAST | NODE: x-789-alpha
+            </p>
+</div>
+</aside>
+</body></html>

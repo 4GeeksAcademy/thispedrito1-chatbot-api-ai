@@ -8,5 +8,7 @@ export interface SessionStats {
   completion: number;
   total: number;
   modelName: string;
-  time: number;
+  totalTime: number;
+  requestCount: number;
+  averageTime: number;
 }
